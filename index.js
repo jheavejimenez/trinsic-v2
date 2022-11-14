@@ -22,8 +22,8 @@ connection.once('open', () => {
     console.log('MongoDB connected');
 });
 
-const exampleRouter = require('./routes/example');
-app.use('/api/example', exampleRouter);
+const requestRouter = require('./routes/requests');
+app.use('/api/requests', requestRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on https://localhost:${PORT}`);
