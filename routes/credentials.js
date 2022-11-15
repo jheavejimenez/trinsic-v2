@@ -37,3 +37,5 @@ router.route('/').get(async (req, res) => {
     const newCredential = new Credential(templateId);
     newCredential.save().then(() => res.json(newCredential)).catch(err => res.status(500).json(`error ${err}`));
 });
+
+module.exports = router;

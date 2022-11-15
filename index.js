@@ -23,7 +23,10 @@ connection.once('open', () => {
 });
 
 const requestRouter = require('./routes/requests');
+const credentialRouter = require('./routes/credentials');
+
 app.use('/api/requests', requestRouter);
+app.use('/api/credentials', credentialRouter);
 
 app.listen(PORT, () => {
     console.log(`Server is running on https://localhost:${PORT}`);
