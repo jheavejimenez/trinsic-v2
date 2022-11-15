@@ -21,7 +21,7 @@ async function CreateCredentialSchemas({ title, name, descriptions, orgName }) {
     });
 
     const response = await trinsic.template().create(request);
-    return response.data;
+    return response.data.id;
 }
 
 router.route('/').get(async (req, res) => {
@@ -31,10 +31,10 @@ router.route('/').get(async (req, res) => {
     const { title, name, descriptions, orgName } = req.body;
 
     // Create Credential Schemas in Trinsic
-    const templateId = await CreateCredentialSchemas({ title, name, descriptions, orgName });
+    const id = await CreateCredentialSchemas({ title, name, descriptions, orgName });
 
     // save template id to mongodb
-    const newCredential = new Credential(templateId);
+    const newCredential = new Credential({templateId: id});
     newCredential.save().then(() => res.json(newCredential)).catch(err => res.status(500).json(`error ${err}`));
 });
 

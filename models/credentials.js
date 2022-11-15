@@ -6,5 +6,5 @@ const credentialsSchema = new Schema({
 }, {
     timestamps: true,
 });
-const credentials = mongoose.model('Credentials', credentialsSchema);
-module.exports = credentials;
+const Certificate = mongoose.model('Credentials', credentialsSchema);
+module.exports = Certificate;
