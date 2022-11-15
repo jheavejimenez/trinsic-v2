@@ -1,8 +1,15 @@
 const router = require('express').Router();
-const { IssueFromTemplateRequest, CreateCredentialTemplateRequest, TrinsicService } = require("@trinsic/trinsic");
+let Credential = require('../models/credentials');
+const {
+    CreateCredentialTemplateRequest,
+    TrinsicService
+} = require("@trinsic/trinsic");
 
 async function CreateCredentialSchemas({ title, name, descriptions, orgName }) {
     const trinsic = new TrinsicService();
+
+    // issuer auth token
+    trinsic.setAuthToken(process.env.AUTHTOKEN || "");
 
     let request = CreateCredentialTemplateRequest.fromPartial({
         name: `${title}`,
@@ -18,8 +25,15 @@ async function CreateCredentialSchemas({ title, name, descriptions, orgName }) {
 }
 
 router.route('/').get(async (req, res) => {
-    // TODO: get template id base on org id
+    const credentials = await Credential.find();
+    res.json(credentials);
 }).post(async (req, res) => {
     const { title, name, descriptions, orgName } = req.body;
+
+    // Create Credential Schemas in Trinsic
     const templateId = await CreateCredentialSchemas({ title, name, descriptions, orgName });
+
+    // save template id to mongodb
+    const newCredential = new Credential(templateId);
+    newCredential.save().then(() => res.json(newCredential)).catch(err => res.status(500).json(`error ${err}`));
 });
