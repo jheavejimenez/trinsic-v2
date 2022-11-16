@@ -1,4 +1,3 @@
-const { TrinsicService, EcosystemInfoRequest } = require("@trinsic/trinsic");
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -22,22 +21,6 @@ const connection = mongoose.connection;
 connection.once('open', () => {
     console.log('MongoDB connected');
 });
-
-async function getEcoSystemId() {
-    const trinsic = new TrinsicService();
-
-    trinsic.setAuthToken(process.env.AUTHTOKEN || "");
-
-    const infoResponse = await trinsic
-        .provider()
-        .ecosystemInfo(EcosystemInfoRequest.fromPartial({}));
-
-    const ecosystem = infoResponse.ecosystem;
-
-    return ecosystem?.id;
-}
-
-console.log(`Trinsic Ecosystem id=${await getEcoSystemId()}`);
 
 const requestRouter = require('./routes/requests');
 const credentialRouter = require('./routes/credentials');
