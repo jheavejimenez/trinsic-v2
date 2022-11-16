@@ -1,6 +1,12 @@
-const { LoginRequest } = require("@trinsic/trinsic");
+const { LoginRequest, TrinsicService } = require("@trinsic/trinsic");
 const router = require('express').Router();
 const User = require("../models/users");
+require('dotenv').config();
+
+const trinsic = new TrinsicService();
+
+// issuer auth token
+trinsic.setAuthToken(process.env.AUTHTOKEN || "");
 
 async function loginOrCreateAccount(email) {
     const loginResponse = await trinsic.account().login(

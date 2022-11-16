@@ -2,7 +2,6 @@ const { IssueFromTemplateRequest, LoginRequest } = require("@trinsic/trinsic");
 const router = require('express').Router();
 let Requests = require('../models/requests');
 const User = require("../models/users");
-require('dotenv').config();
 
 router.route('/').get(async (req, res) => {
     const requests = await requests.find();
