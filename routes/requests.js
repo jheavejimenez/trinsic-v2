@@ -2,19 +2,6 @@ const { TrinsicService, EcosystemInfoRequest, IssueFromTemplateRequest } = requi
 const router = require('express').Router();
 require('dotenv').config();
 
-async function getEcoSystemId() {
-    const trinsic = new TrinsicService();
-
-    trinsic.setAuthToken(process.env.AUTHTOKEN || "");
-
-    const infoResponse = await trinsic
-        .provider()
-        .ecosystemInfo(EcosystemInfoRequest.fromPartial({}));
-
-    const ecosystem = infoResponse.ecosystem;
-
-    return ecosystem?.id;
-}
 
 
 router.route('/').get(async (req, res) => {
