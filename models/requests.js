@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
 
-const request = new Schema({
+const requests = new Schema({
     email: { type: String, required: true },
     title: { type: String, required: true },
     name: { type: String, required: true },
@@ -11,5 +11,5 @@ const request = new Schema({
 }, {
     timestamps: true,
 });
-const Requests = mongoose.model('Requests', request);
+const Requests = mongoose.model('Requests', requests);
 module.exports = Requests;

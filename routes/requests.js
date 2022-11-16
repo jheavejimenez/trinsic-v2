@@ -1,39 +1,38 @@
 const { IssueFromTemplateRequest, LoginRequest } = require("@trinsic/trinsic");
 const router = require('express').Router();
+let Requests = require('../models/requests');
+const User = require("../models/users");
 require('dotenv').config();
 
-async function loginOrCreateAccount(email) {
-    const loginResponse = await trinsic.account().login(
-        LoginRequest.fromPartial({ email })
-    );
-
-    if (loginResponse.challenge) {
-        // Account already exists
-        console.log(loginResponse)
-
-        console.log(!loginResponse.challenge)
-    }
-    return loginResponse.challenge;
-}
-
-async function confirmLoginOrCreateAccount(authCode, challenge) {
-    const authToken = await trinsic.account()
-        .loginConfirm(challenge, authCode);
-
-    console.log(authToken)
-    return authToken;
-}
-
 router.route('/').get(async (req, res) => {
+    const requests = await requests.find();
+    res.json(requests);
 }).post(async (req, res) => {
+    const {
+        email,
+        title,
+        name,
+        descriptions,
+        orgname
+    } = req.body;
+
+    // save request to mongodb
+    const request = new Requests({
+        email,
+        title,
+        name,
+        descriptions,
+        orgName
+    });
+
+    request.save()
+        .then(() => res.json(request))
+        .catch(err => res.status(500).json(`error ${err}`));
 
 });
 
 router.route('/:id/issue').put(async (req, res) => {
     // create trinsic account
     
-}).delete(async (req, res) => {
-    // code here
-});
-
+})
 module.exports = router;
