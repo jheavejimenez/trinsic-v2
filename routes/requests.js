@@ -1,30 +1,37 @@
-const { TrinsicService, EcosystemInfoRequest, IssueFromTemplateRequest } = require("@trinsic/trinsic");
+const { IssueFromTemplateRequest, LoginRequest } = require("@trinsic/trinsic");
 const router = require('express').Router();
 require('dotenv').config();
 
+async function loginOrCreateAccount(email) {
+    const loginResponse = await trinsic.account().login(
+        LoginRequest.fromPartial({ email })
+    );
 
+    if (loginResponse.challenge) {
+        // Account already exists
+        console.log(loginResponse)
+
+        console.log(!loginResponse.challenge)
+    }
+    return loginResponse.challenge;
+}
+
+async function confirmLoginOrCreateAccount(authCode, challenge) {
+    const authToken = await trinsic.account()
+        .loginConfirm(challenge, authCode);
+
+    console.log(authToken)
+    return authToken;
+}
 
 router.route('/').get(async (req, res) => {
-    res.send(`Express + TypeScript Server id=${await getEcoSystemId()}`);
 }).post(async (req, res) => {
-    trinsic.options.authToken = process.env.AUTHTOKEN
-    const credentialValues = JSON.stringify({
-        firstName: "Allison",
-        lastName: "Allisonne",
-        batchNumber: "123454321",
-        countryOfVaccination: "US",
-    });
 
-    const issueResponse = await trinsic.credential().issueFromTemplate(
-        IssueFromTemplateRequest.fromPartial({
-            templateId: template.id,
-            valuesJson: credentialValues,
-        })
-    );
 });
 
-router.route('/:id').put(async (req, res) => {
-    // code here
+router.route('/:id/issue').put(async (req, res) => {
+    // create trinsic account
+    
 }).delete(async (req, res) => {
     // code here
 });
