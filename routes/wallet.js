@@ -49,3 +49,5 @@ router.route('/confirm-account').put(async (req, res) => {
 
     res.json(user);
 });
+
+module.exports = router;

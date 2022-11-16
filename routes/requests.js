@@ -35,4 +35,5 @@ router.route('/:id/issue').put(async (req, res) => {
     // create trinsic account
     
 })
+
 module.exports = router;
