@@ -37,9 +37,8 @@ router.route('/create-account').post(async (req, res) => {
 
     // check if user not exist
     if (!user) {
-        const newUser = new User(email);
+        const newUser = new User({email});
         await newUser.save();
-        res.json(newUser);
     }
     res.json(challenge);
 });
