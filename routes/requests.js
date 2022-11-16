@@ -13,7 +13,7 @@ router.route('/').get(async (req, res) => {
         title,
         name,
         descriptions,
-        orgname
+        orgName
     } = req.body;
 
     // save request to mongodb
