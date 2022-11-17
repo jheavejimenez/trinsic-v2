@@ -1,4 +1,7 @@
-import { TrinsicService, VerifyProofRequest } from "@trinsic/trinsic";
+const {
+    TrinsicService,
+    VerifyProofRequest
+} = require("@trinsic/trinsic");
 const router = require('express').Router();
 let Requests = require('../models/requests');
 const trinsic = new TrinsicService();
