@@ -8,7 +8,6 @@ const router = require('express').Router();
 let Requests = require('../models/requests');
 let User = require("../models/users");
 let Credential = require('../models/credentials');
-const { json } = require("express");
 const trinsic = new TrinsicService();
 
 // this function is used to get the ecosystem id of Xperto
