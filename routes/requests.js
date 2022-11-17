@@ -1,7 +1,13 @@
-const { IssueFromTemplateRequest, LoginRequest, TrinsicService, EcosystemInfoRequest, InsertItemRequest } = require("@trinsic/trinsic");
+const {
+    IssueFromTemplateRequest,
+    TrinsicService,
+    EcosystemInfoRequest,
+    InsertItemRequest, CreateProofRequest
+} = require("@trinsic/trinsic");
 const router = require('express').Router();
 let Requests = require('../models/requests');
-const User = require("../models/users");
+let User = require("../models/users");
+let Credential = require('../models/credentials');
 const trinsic = new TrinsicService();
 
 async function getEcoSystemId() {
@@ -24,12 +30,13 @@ async function loginAnonymous({ email }) {
     await newUser.save();
 }
 
-async function issueCredential({ templateId, valuesJson }) {
+async function issueCredential(valuesJson) {
+    const credentialSchema = await Credential.find();
     trinsic.setAuthToken(process.env.AUTHTOKEN || "");
 
     const issueResponse = await trinsic.credential().issueFromTemplate(
         IssueFromTemplateRequest.fromPartial({
-            templateId,
+            templateId: credentialSchema.templateId,
             valuesJson
         })
     );
@@ -37,7 +44,7 @@ async function issueCredential({ templateId, valuesJson }) {
     return issueResponse.documentJson
 }
 
-async function storeCredential(itemJson, email) {
+async function storeAndShareCredential(itemJson, email) {
     // get the user's wallet auth
     const user = await User.findOne({ email });
 
@@ -48,6 +55,14 @@ async function storeCredential(itemJson, email) {
     const insertResponse = await trinsic.wallet().insertItem(
         InsertItemRequest.fromPartial({ itemJson })
     );
+
+    const proofResponse = await trinsic.credential().createProof(
+        CreateProofRequest.fromPartial({
+            itemId: insertResponse.itemId,
+        })
+    );
+
+    return proofResponse.proofDocumentJsonn;
 }
 
 router.route('/').get(async (req, res) => {
@@ -84,12 +99,21 @@ router.route('/').get(async (req, res) => {
 
 router.route('/:id/issue').put(async (req, res) => {
     const credentialValues = JSON.stringify({
-        firstName: "Allison",
-        lastName: "Allisonne",
-        batchNumber: "123454321",
-        countryOfVaccination: "US",
+        name: req.body.name,
+        descriptions: req.body.descriptions,
+        organizationName: req.body.orgName
     });
 
-})
+    const itemJson = await issueCredential(credentialValues);
+    const proofDocumentJson = await storeAndShareCredential(itemJson, req.body.email);
+    try {
+        await Requests.updateOne({ _id: req.params.id }, { $set: { proofDocumentJson } });
+        res.json({ proofDocumentJson });
+    }
+    catch (err) {
+        res.status(500).json(`error ${err}`);
+    }
+});
+
 
 module.exports = router;
