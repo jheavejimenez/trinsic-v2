@@ -5,9 +5,6 @@ require('dotenv').config();
 
 const trinsic = new TrinsicService();
 
-// issuer auth token
-// trinsic.setAuthToken(process.env.AUTHTOKEN || "");
-
 async function loginOrCreateAccount(email) {
     const loginResponse = await trinsic.account().login(
         LoginRequest.fromPartial({ email })
@@ -26,7 +23,6 @@ async function confirmLoginOrCreateAccount(authCode, challenge) {
     const authToken = await trinsic.account()
         .loginConfirm(challenge, authCode);
 
-    console.log(authToken)
     return authToken;
 }
 
