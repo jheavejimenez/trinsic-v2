@@ -7,7 +7,7 @@ const requests = new Schema({
     name: { type: String, required: true },
     descriptions: { type: String, required: true },
     orgName: { type: String, required: true },
-    proofResponse: { type: String},
+    proofDocumentJson: { type: String},
 
 }, {
     timestamps: true,

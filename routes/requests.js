@@ -69,7 +69,7 @@ async function storeAndShareCredential(itemJson, email) {
         })
     );
 
-    return proofResponse.proofDocumentJsonn;
+    return proofResponse.proofDocumentJson;
 }
 
 router.route('/').get(async (req, res) => {
@@ -115,8 +115,8 @@ router.route('/:id/issue').put(async (req, res) => {
     const itemJson = await issueCredential(credentialValues);
     const proofDocumentJson = await storeAndShareCredential(itemJson, req.body.email);
     try {
-        await Requests.updateOne({ _id: req.params.id }, { $set: { proofDocumentJson } });
-        res.json({ proofDocumentJson });
+        const updated = await Requests.findByIdAndUpdate(req.params.id, { proofDocumentJson }, { new: true });
+        res.json(updated);
     }
     catch (err) {
         res.status(500).json(`error ${err}`);
