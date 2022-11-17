@@ -66,7 +66,7 @@ async function storeAndShareCredential(itemJson, email) {
 }
 
 router.route('/').get(async (req, res) => {
-    const requests = await requests.find();
+    const requests = await Requests.find();
     res.json(requests);
 }).post(async (req, res) => {
     const {
