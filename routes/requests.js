@@ -11,6 +11,7 @@ let Credential = require('../models/credentials');
 const { json } = require("express");
 const trinsic = new TrinsicService();
 
+// this function is used to get the ecosystem id of Xperto
 async function getEcoSystemId() {
     trinsic.setAuthToken(process.env.AUTHTOKEN || "");
 
@@ -26,16 +27,21 @@ async function getEcoSystemId() {
 async function loginAnonymous({ email }) {
     trinsic.setAuthToken(process.env.AUTHTOKEN || "");
 
-    const walletAuth = await trinsic.account().loginAnonymous(await getEcoSystemId());
+    const walletAuth = await trinsic.account()
+        .loginAnonymous(await getEcoSystemId()); // you can change it to get the ecosystem id of Xperto using env
+
     const newUser = new User({ email, walletAuth });
     await newUser.save();
 }
 
 async function issueCredential(valuesJson) {
+    // find the template id of the credentials schema
+    // you can also get the template id using org id
     const credentialSchema = await Credential.find();
-    console.log(JSON.stringify(credentialSchema[0]))
+
     trinsic.setAuthToken(process.env.AUTHTOKEN || "");
 
+    // issue the credential and generate the credential json
     const issueResponse = await trinsic.credential().issueFromTemplate(
         IssueFromTemplateRequest.fromPartial({
             templateId: credentialSchema[0].templateId,
@@ -84,6 +90,7 @@ router.route('/').get(async (req, res) => {
     if (!user) {
         await loginAnonymous({ email });
     }
+
     // save request to mongodb
     const request = new Requests({
         email,
