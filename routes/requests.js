@@ -8,6 +8,7 @@ const router = require('express').Router();
 let Requests = require('../models/requests');
 let User = require("../models/users");
 let Credential = require('../models/credentials');
+const { json } = require("express");
 const trinsic = new TrinsicService();
 
 async function getEcoSystemId() {
@@ -32,11 +33,12 @@ async function loginAnonymous({ email }) {
 
 async function issueCredential(valuesJson) {
     const credentialSchema = await Credential.find();
+    console.log(JSON.stringify(credentialSchema[0]))
     trinsic.setAuthToken(process.env.AUTHTOKEN || "");
 
     const issueResponse = await trinsic.credential().issueFromTemplate(
         IssueFromTemplateRequest.fromPartial({
-            templateId: credentialSchema.templateId,
+            templateId: credentialSchema[0].templateId,
             valuesJson
         })
     );

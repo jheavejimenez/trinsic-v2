@@ -6,7 +6,7 @@ require('dotenv').config();
 const trinsic = new TrinsicService();
 
 // issuer auth token
-trinsic.setAuthToken(process.env.AUTHTOKEN || "");
+// trinsic.setAuthToken(process.env.AUTHTOKEN || "");
 
 async function loginOrCreateAccount(email) {
     const loginResponse = await trinsic.account().login(
@@ -29,6 +29,18 @@ async function confirmLoginOrCreateAccount(authCode, challenge) {
     console.log(authToken)
     return authToken;
 }
+
+router.route('/').get(async (req, res) => {
+    try {
+        const users = await User.findOne({ email: req.query.email });
+
+        trinsic.options.authToken = users.walletAuth;
+        let items = await trinsic.wallet().searchWallet();
+        res.json(items);
+    } catch (err) {
+        res.status(500).json(`error ${err}`);
+    }
+});
 
 router.route('/create-account').post(async (req, res) => {
     const { email } = req.body;
