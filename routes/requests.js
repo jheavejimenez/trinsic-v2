@@ -37,8 +37,14 @@ async function issueCredential({ templateId, valuesJson }) {
     return issueResponse.documentJson
 }
 
-async function storeCredential(itemJson) {
+async function storeCredential(itemJson, email) {
     // get the user's wallet auth
+    const user = await User.findOne({ email });
+
+    // set the wallet auth token
+    trinsic.options.authToken = user.walletAuth;
+
+    // store the credential to the user's wallet
     const insertResponse = await trinsic.wallet().insertItem(
         InsertItemRequest.fromPartial({ itemJson })
     );
