@@ -89,4 +89,8 @@ router.route('/check').get(async (req, res) => {
     res.json(id);
 });
 
+router.route('/generate-id').get(async (req, res) => {
+    const id = await customID();
+    res.json(id);
+});
 module.exports = router;
