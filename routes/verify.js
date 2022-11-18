@@ -4,6 +4,7 @@ const {
 } = require("@trinsic/trinsic");
 const router = require('express').Router();
 let Requests = require('../models/requests');
+const { nanoid } = require("./credentials");
 const trinsic = new TrinsicService();
 
 async function verifyCredential(proofDocumentJson) {
