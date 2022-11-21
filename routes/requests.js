@@ -126,7 +126,8 @@ router.route('/:id/issue').put(async (req, res) => {
 router.route('/:id/revoke').put(async (req, res) => {
     trinsic.setAuthToken(process.env.AUTHTOKEN || "");
     let updateStatusResponse = await trinsic.credential().updateStatus(UpdateStatusRequest.fromPartial({
-        credentialStatusId: "urn:revocation-registry:xperto-test:DTX3rB6YnR94sSd1gGkmpC#0"
+        credentialStatusId: req.params.id,
+        revoked: true
     }));
     res.json(updateStatusResponse)
 });
