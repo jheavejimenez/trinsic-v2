@@ -126,7 +126,7 @@ router.route('/:id/issue').put(async (req, res) => {
 router.route('/:id/revoke').put(async (req, res) => {
     trinsic.setAuthToken(process.env.AUTHTOKEN || "");
     let updateStatusResponse = await trinsic.credential().updateStatus(UpdateStatusRequest.fromPartial({
-        credentialStatusId: req.params.id,
+        credentialStatusId: req.body.credentialId,
         revoked: true
     }));
     res.json(updateStatusResponse)
@@ -135,7 +135,7 @@ router.route('/:id/revoke').put(async (req, res) => {
 router.route('/check-revocation-status').get(async (req, res) => {
     trinsic.setAuthToken(process.env.AUTHTOKEN);
     let checkStatusResponse = await trinsic.credential().checkStatus(CheckStatusRequest.fromPartial({
-        credentialStatusId: req.query.credentialId
+        credentialStatusId: decodeURIComponent(req.query.credentialId)
     }));
     res.json(checkStatusResponse);
 })
