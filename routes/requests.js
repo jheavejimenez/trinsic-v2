@@ -2,7 +2,7 @@ const {
     IssueFromTemplateRequest,
     TrinsicService,
     EcosystemInfoRequest,
-    InsertItemRequest, CreateProofRequest
+    InsertItemRequest, CreateProofRequest, UpdateStatusRequest
 } = require("@trinsic/trinsic");
 const router = require('express').Router();
 let Requests = require('../models/requests');
@@ -123,5 +123,13 @@ router.route('/:id/issue').put(async (req, res) => {
     }
 });
 
+router.route('/:id/revoke').put(async (req, res) => {
+    trinsic.setAuthToken(process.env.AUTHTOKEN || "");
+    let updateStatusResponse = await trinsic.credential().updateStatus(UpdateStatusRequest.fromPartial({
+        credentialStatusId: "urn:revocation-registry:xperto-test:DTX3rB6YnR94sSd1gGkmpC#0"
+    }));
+    res.json(updateStatusResponse)
+
+});
 
 module.exports = router;
