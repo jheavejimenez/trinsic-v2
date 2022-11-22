@@ -19,11 +19,9 @@ async function loginOrCreateAccount(email) {
     return loginResponse.challenge;
 }
 
-async function confirmLoginOrCreateAccount(authCode, challenge) {
-    const authToken = await trinsic.account()
+async function confirmLoginOrCreateAccount(challenge, authCode) {
+    return await trinsic.account()
         .loginConfirm(challenge, authCode);
-
-    return authToken;
 }
 
 router.route('/').get(async (req, res) => {
