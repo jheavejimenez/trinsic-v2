@@ -32,6 +32,30 @@ app.use('/api/credential-schemas', credentialRouter);
 app.use('/api/wallet', walletRouter);
 app.use('/api/verify',verifyRouter);
 
+app.get('/api/endpoints', (req, res) => {
+    res.send(
+        `
+        <h1>API Endpoints</h1>
+        <ul>
+            <li>GET /api/requests</li>
+            <li>GET /api/requests/check-revocation-status</li>
+            <li>POST /api/requests</li>
+            <li>PUT /api/requests/:id/issue</li>
+            <li>PUT /api/requests/:id/revoke</li>
+            <li>GET /api/credential-schemas</li>
+            <li>GET /api/credential-schemas/check</li>
+            <li>GET /api/credential-schemas/generate-id</li>
+            <li>POST /api/credential-schemas</li>
+            <li>GET /api/wallet</li>
+            <li>POST /api/wallet/create-account</li>
+            <li>PUT /api/wallet/confirm-account</li>
+            <li>GET /api/verify</li>
+        </ul>
+        `
+    )
+});
+
+
 app.listen(PORT, () => {
-    console.log(`Server is running on https://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
