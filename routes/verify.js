@@ -4,17 +4,15 @@ const {
 } = require("@trinsic/trinsic");
 const router = require('express').Router();
 let Requests = require('../models/requests');
-const { nanoid } = require("./credentials");
 const trinsic = new TrinsicService();
 
 async function verifyCredential(proofDocumentJson) {
     trinsic.options.authToken = process.env.AUTHTOKEN || "";
-    const verifyResponse = await trinsic.credential().verifyProof(
+    return await trinsic.credential().verifyProof(
         VerifyProofRequest.fromPartial({
             proofDocumentJson: proofDocumentJson,
         })
     );
-    return verifyResponse;
 }
 
 router.route('/').get(async (req, res) => {
