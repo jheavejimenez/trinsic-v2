@@ -23,7 +23,7 @@ async function getEcoSystemId() {
     return ecosystem?.id;
 }
 
-// TODO: remove after wallet creation using email
+// This code is for dev environment only
 async function loginAnonymous({ email }) {
     trinsic.setAuthToken(process.env.AUTHTOKEN || "");
 
@@ -85,13 +85,15 @@ router.route('/').get(async (req, res) => {
         orgName
     } = req.body;
 
-    const user = await User.findOne({ email: email });
+    /***
+     you can uncomment this code if you are testing it dev environment
 
-    // TODO: if you implemented the wallet creation with email remove this code
-    if (!user) {
-        await loginAnonymous({ email });
-    }
+     const user = await User.findOne({ email: email });
+     if (!user) {
+         await loginAnonymous({ email });
+     }
 
+    ***/
     // save request to mongodb
     const request = new Requests({
         email,
