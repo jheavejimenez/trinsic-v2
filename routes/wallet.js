@@ -4,24 +4,18 @@ const User = require("../models/users");
 require('dotenv').config();
 
 const trinsic = new TrinsicService();
+trinsic.setAuthToken(process.env.AUTHTOKEN || "");
 
 async function loginOrCreateAccount(email) {
     const loginResponse = await trinsic.account().login(
         LoginRequest.fromPartial({ email })
     );
 
-    if (loginResponse.challenge) {
-        // Account already exists
-        console.log(loginResponse)
-
-        console.log(!loginResponse.challenge)
-    }
     return loginResponse.challenge;
 }
 
 async function confirmLoginOrCreateAccount(challenge, authCode) {
-    return await trinsic.account()
-        .loginConfirm(challenge, authCode);
+    return await trinsic.account().loginConfirm(challenge, authCode);
 }
 
 router.route('/').get(async (req, res) => {
@@ -50,8 +44,8 @@ router.route('/create-account').post(async (req, res) => {
 });
 
 router.route('/confirm-account').put(async (req, res) => {
-    const { email, authCode, challenge } = req.body;
-    const authToken = await confirmLoginOrCreateAccount(challenge, authCode);
+    const { email, challenge, authCode  } = req.body;
+    const authToken = await confirmLoginOrCreateAccount(challenge, authCode)
 
     // put the auth token to user
     const user = await User.findOne({ email });
