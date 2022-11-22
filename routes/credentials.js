@@ -51,22 +51,20 @@ const generateCustomAlphabet = async () => {
 }
 
 
-async function CreateCredentialSchemas({ title, name, descriptions, orgName }) {
+async function CreateCredentialSchemas(props) {
     const trinsic = new TrinsicService();
 
     // issuer auth token
     trinsic.setAuthToken(process.env.AUTHTOKEN || "");
 
     let request = CreateCredentialTemplateRequest.fromPartial({
-        name: `${title}-${await customID()}`,
+        name: `${props.title}-${await customID()}`,
         fields: {
-            name,
-            descriptions,
-            organizationName: orgName
-        },
+            ...props.fields
+        }
     });
-
     const response = await trinsic.template().create(request);
+
     return response.data.id;
 }
 
@@ -74,10 +72,14 @@ router.route('/').get(async (req, res) => {
     const credentials = await Credential.find();
     res.json(credentials);
 }).post(async (req, res) => {
-    const { title, name, descriptions, orgName } = req.body;
-
+    if (!req.body.title || !req.body.fields) {
+        res.status(400).send({
+            message: "title && fields can not be empty"
+        });
+        return;
+    }
     // Create Credential Schemas in Trinsic
-    const id = await CreateCredentialSchemas({ title, name, descriptions, orgName });
+    const id = await CreateCredentialSchemas({...req.body});
 
     // save template id to mongodb
     const newCredential = new Credential({ templateId: id });
