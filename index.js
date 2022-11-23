@@ -41,7 +41,7 @@ app.get('/api/endpoints', (req, res) => {
             <li>GET /api/requests/check-revocation-status</li>
             <li>POST /api/requests</li>
             <li>PUT /api/requests/:id/issue</li>
-            <li>PUT /api/requests/:id/revoke</li>
+            <li>PUT /api/requests/revoke</li>
             <li>GET /api/credential-schemas</li>
             <li>GET /api/credential-schemas/check</li>
             <li>GET /api/credential-schemas/generate-id</li>

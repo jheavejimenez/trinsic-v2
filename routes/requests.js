@@ -127,7 +127,7 @@ router.route('/:id/issue').put(async (req, res) => {
     }
 });
 
-router.route('/:id/revoke').put(async (req, res) => {
+router.route('/revoke').put(async (req, res) => {
     trinsic.setAuthToken(process.env.AUTHTOKEN || "");
     let updateStatusResponse = await trinsic.credential().updateStatus(UpdateStatusRequest.fromPartial({
         credentialStatusId: req.body.credentialId,
