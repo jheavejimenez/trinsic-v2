@@ -12,7 +12,7 @@ Second, run the development server:
  nodemon index.js
 ```
 
-API routes can be accessed on [http://localhost:8080/api/endpoints](http://localhost:8080/api/endpoints). This endpoints can be edited in `routes` folder.
+list of API routes can be see on [http://localhost:8080/api/endpoints](http://localhost:8080/api/endpoints). This endpoints can be edited in `routes` folder.
 
 ## Learn More
 
