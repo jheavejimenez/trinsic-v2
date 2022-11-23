@@ -49,7 +49,7 @@ app.get('/api/endpoints', (req, res) => {
             <li>GET /api/wallet?email=user email</li>
             <li>POST /api/wallet/create-account</li>
             <li>PUT /api/wallet/confirm-account</li>
-            <li>GET /api/verify</li>
+            <li>GET /api/verify?id=request id</li>
         </ul>
         `
     )
