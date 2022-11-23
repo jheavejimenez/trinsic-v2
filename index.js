@@ -46,7 +46,7 @@ app.get('/api/endpoints', (req, res) => {
             <li>GET /api/credential-schemas/check</li>
             <li>GET /api/credential-schemas/generate-id</li>
             <li>POST /api/credential-schemas</li>
-            <li>GET /api/wallet</li>
+            <li>GET /api/wallet?email=user email</li>
             <li>POST /api/wallet/create-account</li>
             <li>PUT /api/wallet/confirm-account</li>
             <li>GET /api/verify</li>
